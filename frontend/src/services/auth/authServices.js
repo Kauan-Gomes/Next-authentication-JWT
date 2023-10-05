@@ -1,19 +1,15 @@
+import { HttpClient } from '../../infra/HttpClient/HttpClient'
+''
 export const authService = {
     async login({ username, password}) {
         // Video usa variavel de ambiente no local do localhost, porém está dando erro
-        return fetch(`http://localhost:4000/api/login`, {
+        return HttpClient(`http://localhost:4000/api/login`, {
             method: 'POST',
-            headers: {
-                'Content-Type' : 'application/json'
-            },
-            body: JSON.stringify({
-                username,
-                password
-            })
+            body: {username, password}
         })
         .then(async (respostaDoServidor) => {
             if(!respostaDoServidor.ok) throw new Error ('Usuário ou senha inválido')
-            const body = await respostaDoServidor.json()
+            const body = await respostaDoServidor.body
             console.log(body)
         })
     }
